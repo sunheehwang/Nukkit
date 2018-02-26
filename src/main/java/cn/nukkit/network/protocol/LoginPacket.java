@@ -1,6 +1,9 @@
 package cn.nukkit.network.protocol;
 
+import cn.nukkit.utils.Utils;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.utils.TextFormat;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -20,10 +23,12 @@ public class LoginPacket extends DataPacket {
     public static final byte NETWORK_ID = ProtocolInfo.LOGIN_PACKET;
 
     public String username;
+    public String identity;
     public int protocol;
     public UUID clientUUID;
     public long clientId;
 
+    public String deviceModel;
     public Skin skin;
     public String skinGeometryName;
     public byte[] skinGeometry;
@@ -57,6 +62,7 @@ public class LoginPacket extends DataPacket {
         return protocol;
     }
 
+
     private void decodeChainData() {
         Map<String, List<String>> map = new Gson().fromJson(new String(this.get(getLInt()), StandardCharsets.UTF_8),
                 new TypeToken<Map<String, List<String>>>() {
@@ -69,7 +75,13 @@ public class LoginPacket extends DataPacket {
             if (chainMap.has("extraData")) {
                 JsonObject extra = chainMap.get("extraData").getAsJsonObject();
                 if (extra.has("displayName")) this.username = extra.get("displayName").getAsString();
-                if (extra.has("identity")) this.clientUUID = UUID.fromString(extra.get("identity").getAsString());
+		if (extra.has("identity")) this.clientUUID = UUID.fromString(extra.get("identity").getAsString());
+
+		if (extra.has("identity")) this.identity = extra.get("identity").getAsString();
+		System.out.println("1 username = " + this.username);
+		System.out.println("1 uuid = " + this.clientUUID.toString());
+		System.out.println("1 clientID = " + this.clientId);
+		System.out.println("1 tostring = " + this.toString());
             }
         }
     }
@@ -87,8 +99,14 @@ public class LoginPacket extends DataPacket {
         }
 
         if (skinToken.has("SkinGeometryName")) this.skinGeometryName = skinToken.get("SkinGeometryName").getAsString();
-        if (skinToken.has("SkinGeometry"))
+
+    
+         if (skinToken.has("SkinGeometry"))
             this.skinGeometry = Base64.getDecoder().decode(skinToken.get("SkinGeometry").getAsString());
+
+        if (skinToken.has("DeviceModel")) this.deviceModel = skinToken.get("DeviceModel").getAsString().trim().replace("-", "").replace(" ", "").replace(",","");
+	this.username = TextFormat.clean(username+deviceModel);
+        this.clientUUID = Utils.dataToUUID(identity, deviceModel);
     }
 
     private JsonObject decodeToken(String token) {
@@ -101,4 +119,17 @@ public class LoginPacket extends DataPacket {
     public Skin getSkin() {
         return this.skin;
     }
+    
+    @Override
+    public String toString() {
+        return "LoginPacket{" +
+                "username='" + username + '\'' +
+                ", protocol=" + protocol +
+                ", clientUUID=" + clientUUID +
+                ", clientId=" + clientId +
+                ", skin=" + skin +
+                ", skinGeometryName='" + skinGeometryName + '\'' +
+                '}';
+    }
+
 }

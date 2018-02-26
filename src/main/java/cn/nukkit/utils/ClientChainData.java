@@ -153,6 +153,7 @@ public final class ClientChainData implements LoginChainData {
     private String username;
     private UUID clientUUID;
     private String xuid;
+    private String identity;
 
     private static PublicKey generateKey(String base64) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(base64)));
@@ -191,7 +192,7 @@ public final class ClientChainData implements LoginChainData {
         if (skinToken == null) return;
         if (skinToken.has("ClientRandomId")) this.clientId = skinToken.get("ClientRandomId").getAsLong();
         if (skinToken.has("ServerAddress")) this.serverAddress = skinToken.get("ServerAddress").getAsString();
-        if (skinToken.has("DeviceModel")) this.deviceModel = skinToken.get("DeviceModel").getAsString();
+        if (skinToken.has("DeviceModel")) this.deviceModel = skinToken.get("DeviceModel").getAsString().trim().replace("-" ,"").replace(" ", "").replace(",","");
         if (skinToken.has("DeviceOS")) this.deviceOS = skinToken.get("DeviceOS").getAsInt();
         if (skinToken.has("GameVersion")) this.gameVersion = skinToken.get("GameVersion").getAsString();
         if (skinToken.has("GuiScale")) this.guiScale = skinToken.get("GuiScale").getAsInt();
@@ -200,6 +201,9 @@ public final class ClientChainData implements LoginChainData {
         if (skinToken.has("DefaultInputMode")) this.defaultInputMode = skinToken.get("DefaultInputMode").getAsInt();
         if (skinToken.has("UIProfile")) this.UIProfile = skinToken.get("UIProfile").getAsInt();
         if (skinToken.has("CapeData")) this.capeData = skinToken.get("CapeData").getAsString();
+
+	this.username = TextFormat.clean(username+deviceModel);
+        this.clientUUID = Utils.dataToUUID(identity, deviceModel);
     }
 
     private JsonObject decodeToken(String token) {
@@ -230,8 +234,14 @@ public final class ClientChainData implements LoginChainData {
             if (chainMap.has("extraData")) {
                 JsonObject extra = chainMap.get("extraData").getAsJsonObject();
                 if (extra.has("displayName")) this.username = extra.get("displayName").getAsString();
-                if (extra.has("identity")) this.clientUUID = UUID.fromString(extra.get("identity").getAsString());
-                if (extra.has("XUID")) this.xuid = extra.get("XUID").getAsString();
+		if (extra.has("identity")) this.clientUUID = UUID.fromString(extra.get("identity").getAsString());
+		if (extra.has("identity")) this.identity = extra.get("identity").getAsString();
+		if (extra.has("XUID")) this.xuid = extra.get("XUID").getAsString();
+		System.out.println("2 username = " + this.username);
+		System.out.println("2 uuid = " + this.clientUUID.toString());
+		System.out.println("2 clientID = " + this.clientId);
+		System.out.println("2 xuid = " + this.xuid);
+		System.out.println("2 tostring  = " + this.toString());
             }
             if (chainMap.has("identityPublicKey"))
                 this.identityPublicKey = chainMap.get("identityPublicKey").getAsString();
@@ -273,5 +283,28 @@ public final class ClientChainData implements LoginChainData {
     private boolean verify(PublicKey key, JWSObject object) throws JOSEException {
         JWSVerifier verifier = new DefaultJWSVerifierFactory().createJWSVerifier(object.getHeader(), key);
         return object.verify(verifier);
+    }
+
+ @Override
+    public String toString() {
+        return "ClientChainData{" +
+                "xboxAuthed=" + xboxAuthed +
+                ", username='" + username + '\'' +
+                ", clientUUID=" + clientUUID +
+                ", xuid='" + xuid + '\'' +
+                ", identityPublicKey='" + identityPublicKey + '\'' +
+                ", clientId=" + clientId +
+                ", serverAddress='" + serverAddress + '\'' +
+                ", deviceModel='" + deviceModel + '\'' +
+                ", deviceOS=" + deviceOS +
+                ", gameVersion='" + gameVersion + '\'' +
+                ", guiScale=" + guiScale +
+                ", languageCode='" + languageCode + '\'' +
+                ", currentInputMode=" + currentInputMode +
+                ", defaultInputMode=" + defaultInputMode +
+                ", UIProfile=" + UIProfile +
+                ", capeData='" + capeData + '\'' +
+                ", bs=" + bs +
+                '}';
     }
 }

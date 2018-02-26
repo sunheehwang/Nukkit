@@ -1,5 +1,6 @@
 package cn.nukkit.entity;
 
+
 import cn.nukkit.Player;
 import cn.nukkit.entity.data.IntPositionEntityData;
 import cn.nukkit.entity.data.Skin;

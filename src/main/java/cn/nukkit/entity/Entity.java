@@ -433,7 +433,6 @@ public abstract class Entity extends Location implements Metadatable {
     public boolean hasCustomName() {
         return !this.getNameTag().isEmpty();
     }
-
     public String getNameTag() {
         return this.getDataPropertyString(DATA_NAMETAG);
     }

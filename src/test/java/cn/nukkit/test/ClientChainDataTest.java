@@ -40,6 +40,7 @@ class ClientChainDataTest {
 				data.getXUID(), data.getCurrentInputMode(),
 				data.getDefaultInputMode(), data.getUIProfile()
 		);
+/*
 		String expecting = "userName=lmlstarqaq, clientUUID=8323afe1-641e-3b61-9a92-d5d20b279065, " +
 				"identityPublicKey=MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE4lyvA1iVhV2u3pLQqJAjJnJZSlSjib8mM1uB5h5yqOBSvCHW+nZxDmkOAW6MS1GA7yGHitGmfS4jW/yUISUdWvLzEWJYOzphb3GNh5J1oLJRwESc5278i4MEDk1y21/q, " +
 				"clientId=-6315607246631494544, " +
@@ -48,6 +49,11 @@ class ClientChainDataTest {
 				"guiScale=0, languageCode=zh_CN, " +
 				"xuid=2535465134455915, currentInputMode=2, " +
 				"defaultInputMode=2, UIProfile=1";
+*/
+
+String expecting = "userName=lmlstarqaqiPhone62, clientUUID=5f8d0d94-7558-39c2-8506-9fbb27b0eae4, identityPublicKey=MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE4lyvA1iVhV2u3pLQqJAjJnJZSlSjib8mM1uB5h5yqOBSvCHW+nZxDmkOAW6MS1GA7yGHitGmfS4jW/yUISUdWvLzEWJYOzphb3GNh5J1oLJRwESc5278i4MEDk1y21/q, clientId=-6315607246631494544, serverAddress=192.168.1.108:19132, deviceModel=iPhone62, deviceOS=2, gameVersion=1.1.0, guiScale=0, languageCode=zh_CN, xuid=2535465134455915, currentInputMode=2, defaultInputMode=2, UIProfile=1";
+
+
 		assertEquals(got, expecting);
 	}
 

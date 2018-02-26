@@ -1855,14 +1855,15 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
             this.server.getPluginManager().subscribeToPermission(Server.BROADCAST_CHANNEL_ADMINISTRATIVE, this);
         }
 
+System.out.println("3 player = " + this.toString());
         for (Player p : new ArrayList<>(this.server.getOnlinePlayers().values())) {
             if (p != this && p.getName() != null && p.getName().equalsIgnoreCase(this.getName())) {
-                if (!p.kick(PlayerKickEvent.Reason.NEW_CONNECTION, "logged in from another location")) {
+                if (!p.kick(PlayerKickEvent.Reason.NEW_CONNECTION, "logged in from another location1")) {
                     this.close(this.getLeaveMessage(), "Already connected");
                     return;
                 }
             } else if (p.loggedIn && this.getUniqueId().equals(p.getUniqueId())) {
-                if (!p.kick(PlayerKickEvent.Reason.NEW_CONNECTION, "logged in from another location")) {
+                if (!p.kick(PlayerKickEvent.Reason.NEW_CONNECTION, "logged in from another location2")) {
                     this.close(this.getLeaveMessage(), "Already connected");
                     return;
                 }
@@ -2106,7 +2107,7 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
 
                     boolean valid = true;
                     int len = loginPacket.username.length();
-                    if (len > 16 || len < 3) {
+                    if (len > 100 || len < 3) {
                         valid = false;
                     }
 
@@ -2123,6 +2124,7 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                         valid = false;
                         break;
                     }
+System.out.println("valid="+valid+" "+loginPacket.username+"\n\n");
 
                     if (!valid || Objects.equals(this.iusername, "rcon") || Objects.equals(this.iusername, "console")) {
                         this.close("", "disconnectionScreen.invalidName");
@@ -4639,4 +4641,81 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
         pk.xuid = xuid;
         this.dataPacket(pk);
     }
+ @Override
+    public String toString() {
+        return "Player{" +
+                "interfaz=" + interfaz +
+                ", playedBefore=" + playedBefore +
+                ", spawned=" + spawned +
+                ", loggedIn=" + loggedIn +
+                ", gamemode=" + gamemode +
+                ", lastBreak=" + lastBreak +
+                ", windowCnt=" + windowCnt +
+                ", windows=" + windows +
+                ", windowIndex=" + windowIndex +
+                ", permanentWindows=" + permanentWindows +
+                ", messageCounter=" + messageCounter +
+                ", clientSecret='" + clientSecret + '\'' +
+                ", speed=" + speed +
+                ", achievements=" + achievements +
+                ", craftingType=" + craftingType +
+                ", cursorInventory=" + cursorInventory +
+                ", craftingGrid=" + craftingGrid +
+                ", craftingTransaction=" + craftingTransaction +
+                ", creationTime=" + creationTime +
+                ", randomClientId=" + randomClientId +
+                ", forceMovement=" + forceMovement +
+                ", teleportPosition=" + teleportPosition +
+                ", connected=" + connected +
+                ", ip='" + ip + '\'' +
+                ", removeFormat=" + removeFormat +
+                ", port=" + port +
+                ", username='" + username + '\'' +
+                ", iusername='" + iusername + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", startAction=" + startAction +
+                ", sleeping=" + sleeping +
+                ", clientID=" + clientID +
+                ", loaderId=" + loaderId +
+                ", stepHeight=" + stepHeight +
+                ", usedChunks=" + usedChunks +
+                ", chunkLoadCount=" + chunkLoadCount +
+                ", loadQueue=" + loadQueue +
+                ", nextChunkOrderRun=" + nextChunkOrderRun +
+                ", hiddenPlayers=" + hiddenPlayers +
+                ", newPosition=" + newPosition +
+                ", chunkRadius=" + chunkRadius +
+                ", viewDistance=" + viewDistance +
+                ", chunksPerTick=" + chunksPerTick +
+                ", spawnThreshold=" + spawnThreshold +
+                ", spawnPosition=" + spawnPosition +
+                ", inAirTicks=" + inAirTicks +
+                ", startAirTicks=" + startAirTicks +
+                ", adventureSettings=" + adventureSettings +
+                ", checkMovement=" + checkMovement +
+                ", needACK=" + needACK +
+                ", batchedPackets=" + batchedPackets +
+                ", perm=" + perm +
+                ", exp=" + exp +
+                ", expLevel=" + expLevel +
+                ", foodData=" + foodData +
+                ", killer=" + killer +
+                ", locale=" + locale +
+                ", hash=" + hash +
+                ", buttonText='" + buttonText + '\'' +
+                ", enableClientCommand=" + enableClientCommand +
+                ", viewingEnderChest=" + viewingEnderChest +
+                ", lastEnderPearl=" + lastEnderPearl +
+                ", loginChainData=" + loginChainData +
+                ", breakingBlock=" + breakingBlock +
+                ", pickedXPOrb=" + pickedXPOrb +
+                ", formWindowCount=" + formWindowCount +
+                ", formWindows=" + formWindows +
+                ", serverSettings=" + serverSettings +
+                ", dummyBossBars=" + dummyBossBars +
+                ", foodEnabled=" + foodEnabled +
+                '}';
+    }
+
+
 }
